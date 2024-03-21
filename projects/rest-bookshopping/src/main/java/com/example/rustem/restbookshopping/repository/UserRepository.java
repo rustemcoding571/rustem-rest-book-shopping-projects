@@ -6,4 +6,6 @@ import com.example.rustem.restbookshopping.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
+	User username(String a);
+
 }

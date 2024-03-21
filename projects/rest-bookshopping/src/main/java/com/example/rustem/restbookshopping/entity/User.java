@@ -1,15 +1,18 @@
 package com.example.rustem.restbookshopping.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+@ToString
 public class User {
 
 	@Id
@@ -17,5 +20,5 @@ public class User {
 	
 	private String password;
 	
-	private String enabled;
+	private Integer enabled;
 }
