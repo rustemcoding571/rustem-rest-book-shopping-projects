@@ -1,7 +1,5 @@
 package com.example.rustem.restbookshopping.service;
 
-import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.BookRepository;
 import com.example.rustem.restbookshopping.request.BookAddRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service

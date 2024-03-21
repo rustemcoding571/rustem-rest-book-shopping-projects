@@ -1,7 +1,5 @@
 package com.example.rustem.restbookshopping.service;
 
-import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +11,7 @@ import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.UserRepository;
 import com.example.rustem.restbookshopping.request.LibrarianAddRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -38,9 +37,9 @@ public class UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User();
 		mapper.map(add, user);
-//		String raw = add.getPassword();
-//		String pass = encoder.encode(raw);
-//		user.setPassword(pass);
+		String raw = add.getPassword();
+		String pass = encoder.encode(raw);
+		user.setPassword(pass);
 		user.setEnabled(1);
 		repository.save(user);
 		
