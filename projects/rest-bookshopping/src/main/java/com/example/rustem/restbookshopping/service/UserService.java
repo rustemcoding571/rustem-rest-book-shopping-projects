@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.example.rustem.restbookshopping.entity.Authority;
 import com.example.rustem.restbookshopping.entity.User;
 import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.UserRepository;
@@ -19,12 +20,14 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository repository;
-	
+
 	private final ModelMapper mapper;
 
+	private final AuthorityService authorityService;
+
 	public User username(String a) {
-        User user = repository.username(a);
-		if (user==null) {
+		User user = repository.username(a);
+		if (user == null) {
 			throw new OurRuntimeException(null, "bele bir user yoxdur");
 		}
 		return user;
@@ -42,9 +45,12 @@ public class UserService {
 		user.setPassword(pass);
 		user.setEnabled(1);
 		repository.save(user);
-		
+		Authority authority = new Authority();
+		authority.setAuthority("ROLE_ADMIN");
+		authority.setUsername(user.getUsername());
+		authorityService.save(authority);
+
 		return ResponseEntity.ok(user);
 	}
-	
-	
+
 }
