@@ -1,5 +1,7 @@
 package com.example.rustem.restbookshopping.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,25 +21,33 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
 	private final BookRepository repository;
-	
+
 	private final SecurityService securityService;
-	
+
 	private final UserService userService;
-	
+
 	private final ModelMapper mapper;
 
 	public ResponseEntity<Object> add(@Valid BookAddRequest book, BindingResult br) {
 		if (br.hasErrors()) {
-			throw new OurRuntimeException(br,null);
+			throw new OurRuntimeException(br, null);
 		}
 		User user = userService.username(securityService.findByUsername());
 		String username = user.getUsername();
-		
+
 		Book books = new Book();
 		mapper.map(book, books);
 		books.setCreatorUsername(username);
 		repository.save(books);
-		return ResponseEntity.ok(books); 
+		return ResponseEntity.ok(books);
 	}
-	
+
+	public ResponseEntity<Object> get() {
+		User user = userService.username(securityService.findByUsername());
+		String creatorUsername = user.getUsername();
+		List<Book> books = repository.CreatorUsername(creatorUsername);
+		// response
+		return ResponseEntity.ok(books);
+	}
+
 }
