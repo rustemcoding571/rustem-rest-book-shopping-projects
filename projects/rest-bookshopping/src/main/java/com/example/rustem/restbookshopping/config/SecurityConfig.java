@@ -1,7 +1,6 @@
 package com.example.rustem.restbookshopping.config;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,10 +22,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
-	
-     private final DataSource dataSource;
-	
+
+	private final DataSource dataSource;
+
 	@Bean
 	public UserDetailsService userDetailsService() {
 		JdbcDaoImpl daoImpl = new JdbcDaoImpl();
@@ -36,25 +34,27 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	    return http.csrf().disable()
-	        .authorizeRequests()
-	        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-	        .requestMatchers("/h2-console/**").permitAll()
-	        .requestMatchers(HttpMethod.POST, "users/**").permitAll()
-	        .anyRequest().authenticated()
-	        .and()
-	        .httpBasic()
-	        .and()
-	        .headers().frameOptions().disable() // Burada frameOptions'ı devre dışı bırakıyoruz
-	        .and()
-	        .build();
+		return http.csrf().disable().authorizeRequests()
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.loginProcessingUrl("/authenticate-user").permitAll()
+				.and()
+				.logout().permitAll()
+				.and()
+				.httpBasic()
+				.and()
+				.headers().frameOptions().disable() // Burada frameOptions'ı devre // dışı bırakıyoruz
+				.and()
+				.build();
 	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -62,4 +62,5 @@ public class SecurityConfig {
 		provider.setPasswordEncoder(passwordEncoder());
 		return provider;
 	}
+
 }
