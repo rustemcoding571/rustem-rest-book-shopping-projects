@@ -1,5 +1,6 @@
 package com.example.rustem.restbookshopping.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,8 @@ import com.example.rustem.restbookshopping.entity.User;
 import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.BookRepository;
 import com.example.rustem.restbookshopping.request.BookAddRequest;
+import com.example.rustem.restbookshopping.response.BookDeleteResponse;
+import com.example.rustem.restbookshopping.response.BookDeleteResponseList;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +45,30 @@ public class BookService {
 		return ResponseEntity.ok(books);
 	}
 
-	public ResponseEntity<Object> get() {
+	public ResponseEntity<Object> get(Integer begin, Integer length) {
 		User user = userService.username(securityService.findByUsername());
 		String creatorUsername = user.getUsername();
+		List<Book> pagination = repository.findPagination(begin, length);
 		List<Book> books = repository.CreatorUsername(creatorUsername);
+
 		// response
 		return ResponseEntity.ok(books);
+	}
+
+	public ResponseEntity<Object> delete(Integer id) {
+		Book book = repository
+				.findById(id)
+				.orElseThrow(()-> new RuntimeException("bele bir kitab tapilmadi"));
+		repository.deleteById(id);
+		//Response
+		List<BookDeleteResponseList> responses = new ArrayList<>();
+		BookDeleteResponseList list = new BookDeleteResponseList();
+		mapper.map(book, list);
+		responses.add(list);
+		BookDeleteResponse response = new BookDeleteResponse();
+		response.setList(responses);
+		response.setMessage("bu kitab silindi!");
+		return ResponseEntity.ok(response);
 	}
 
 }
