@@ -13,8 +13,11 @@ import com.example.rustem.restbookshopping.entity.User;
 import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.BookRepository;
 import com.example.rustem.restbookshopping.request.BookAddRequest;
+import com.example.rustem.restbookshopping.request.BookUpdateRequest;
 import com.example.rustem.restbookshopping.response.BookDeleteResponse;
 import com.example.rustem.restbookshopping.response.BookDeleteResponseList;
+import com.example.rustem.restbookshopping.response.BookUpdateListResponse;
+import com.example.rustem.restbookshopping.response.BookUpdateResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,17 +53,24 @@ public class BookService {
 		String creatorUsername = user.getUsername();
 		List<Book> pagination = repository.findPagination(begin, length);
 		List<Book> books = repository.CreatorUsername(creatorUsername);
-
 		// response
 		return ResponseEntity.ok(books);
 	}
 
 	public ResponseEntity<Object> delete(Integer id) {
-		Book book = repository
-				.findById(id)
-				.orElseThrow(()-> new RuntimeException("bele bir kitab tapilmadi"));
-		repository.deleteById(id);
-		//Response
+		if (id == null || id <= 0) {
+			throw new OurRuntimeException(null, "id-ni dogru daxil edin");
+		}
+		User user = userService.username(securityService.findByUsername());
+		String username = user.getUsername();
+		Book book = repository.findById(id)
+				.orElseThrow(() -> new OurRuntimeException(null, "bele bir kitab tapilmadi"));
+		if (book.getCreatorUsername() == username) {
+			repository.deleteById(id);
+		} else {
+			throw new OurRuntimeException(null, "bunu sile bilmezsen");
+		}
+		// Response
 		List<BookDeleteResponseList> responses = new ArrayList<>();
 		BookDeleteResponseList list = new BookDeleteResponseList();
 		mapper.map(book, list);
@@ -68,6 +78,31 @@ public class BookService {
 		BookDeleteResponse response = new BookDeleteResponse();
 		response.setList(responses);
 		response.setMessage("bu kitab silindi!");
+		return ResponseEntity.ok(response);
+	}
+
+	public ResponseEntity<Object> update(@Valid BookUpdateRequest update, BindingResult br) {
+		if (br.hasErrors()) {
+			throw new OurRuntimeException(br, null);
+		}
+		User user = userService.username(securityService.findByUsername());
+		String username = user.getUsername();
+		Book book = repository.findById(update.getBookId())
+				.orElseThrow(() -> new OurRuntimeException(null, "bele bir kitab tapilmadi"));
+		if (book.getCreatorUsername() == username) {
+			mapper.map(update, book);
+			repository.save(book);
+		} else {
+			throw new OurRuntimeException(null, "bunu update ede bilmezsen");
+		}
+		// response
+		List<BookUpdateListResponse> list = new ArrayList<>();
+		BookUpdateListResponse updateListResponse = new BookUpdateListResponse();
+		mapper.map(update, updateListResponse);
+		list.add(updateListResponse);
+		BookUpdateResponse response = new BookUpdateResponse();
+		response.setMessage("id-si: " + update.getBookId() + " olan kitab guncellendi");
+		response.setList(list);
 		return ResponseEntity.ok(response);
 	}
 
