@@ -18,4 +18,9 @@ public class AuthorityService {
 
 	}
 
+	public void deleteByUsername(String username) {
+		repository.deleteByUsername(username);
+
+	}
+
 }

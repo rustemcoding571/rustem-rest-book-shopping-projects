@@ -1,5 +1,7 @@
 package com.example.rustem.restbookshopping.service;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,6 +53,21 @@ public class UserService {
 		authorityService.save(authority);
 
 		return ResponseEntity.ok(user);
+	}
+
+	public void addStudent(User users) {
+		repository.save(users);
+
+	}
+
+	public Optional<User> findById(String username) {
+		Optional<User> c = repository.findById(username);
+		return c;
+	}
+
+	public void deleteUsername(String username) {
+		repository.deleteById(username);
+
 	}
 
 }
