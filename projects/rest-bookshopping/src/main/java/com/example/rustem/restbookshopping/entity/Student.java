@@ -22,5 +22,5 @@ public class Student {
 	private String phone;
 	private String address;
 	private String username;
-	private String password;
+	private String creatorUsername;
 }
