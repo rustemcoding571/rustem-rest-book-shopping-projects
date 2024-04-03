@@ -57,7 +57,6 @@ public class UserService {
 
 	public void addStudent(User users) {
 		repository.save(users);
-
 	}
 
 	public Optional<User> findById(String username) {
