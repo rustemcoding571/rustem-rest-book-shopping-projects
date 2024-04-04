@@ -60,14 +60,24 @@ public class UserService {
 
 	}
 
-	public Optional<User> findById(String username) {
-		Optional<User> c = repository.findById(username);
-		return c;
+//	public void saveByUser(String username, String username2) {
+//		repository.saveByUser(username, username2);
+//
+//	}
+
+	public void deleteByUsername(String username) {
+		repository.deleteByUsername(username);
+
 	}
 
-	public void deleteUsername(String username) {
-		repository.deleteById(username);
+	public Optional<User> findByUsername(String username) {
+		Optional<User> o = repository.findByUsername(username);
+		return o;
+	}
 
+	public Optional<User> findById(Integer userId) {
+		Optional<User> o = repository.findById(userId);
+		return o;
 	}
 
 }
