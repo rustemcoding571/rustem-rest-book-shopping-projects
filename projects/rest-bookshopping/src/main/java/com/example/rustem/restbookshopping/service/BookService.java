@@ -48,10 +48,9 @@ public class BookService {
 		return ResponseEntity.ok(books);
 	}
 
-	public ResponseEntity<Object> get(Integer begin, Integer length) {
+	public ResponseEntity<Object> get() {
 		User user = userService.username(securityService.findByUsername());
 		String creatorUsername = user.getUsername();
-		List<Book> pagination = repository.findPagination(begin, length);
 		List<Book> books = repository.CreatorUsername(creatorUsername);
 		// response
 		return ResponseEntity.ok(books);
@@ -104,6 +103,11 @@ public class BookService {
 		response.setMessage("id-si: " + update.getBookId() + " olan kitab guncellendi");
 		response.setList(list);
 		return ResponseEntity.ok(response);
+	}
+
+	public ResponseEntity<Object> findAllPagination(Integer begin, Integer length) {
+		List<Book> pagination = repository.findPagination(begin, length);
+		return ResponseEntity.ok(pagination);
 	}
 
 }

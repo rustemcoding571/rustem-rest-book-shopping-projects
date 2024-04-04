@@ -35,9 +35,16 @@ public class BookRestController {
 	}
 
 	// books get REST API
+	@GetMapping()
+	public ResponseEntity<Object> findAll() {
+		ResponseEntity<Object> resp = service.get();
+		return resp;
+	}
+
+	// books get pagination REST API
 	@GetMapping(path = "/pagination/begin/{begin}/length/{length}")
-	public ResponseEntity<Object> findAll(@PathVariable Integer begin, @PathVariable Integer length) {
-		ResponseEntity<Object> resp = service.get(begin, length);
+	public ResponseEntity<Object> findAllPagination(@PathVariable Integer begin, @PathVariable Integer length) {
+		ResponseEntity<Object> resp = service.findAllPagination(begin, length);
 		return resp;
 	}
 
