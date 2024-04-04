@@ -7,6 +7,8 @@ import lombok.Data;
 public class StudentUpdateRequest {
 
 	private Integer id;
+	private Integer authorityId;
+	private Integer userId;
 	@Size(min = 2, max = 20, message = "tələbənin adı minimum 2, maksimum 20 simvol olmalıdır.")
 	private String name;
 	@Size(min = 2, max = 20, message = "tələbənin soyadı minimum 2, maksimum 20 simvol olmalıdır.")
