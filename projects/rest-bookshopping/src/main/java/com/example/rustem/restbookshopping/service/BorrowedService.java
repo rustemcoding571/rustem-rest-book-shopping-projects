@@ -13,6 +13,7 @@ import com.example.rustem.restbookshopping.entity.User;
 import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.BookRepository;
 import com.example.rustem.restbookshopping.repository.BorrowedBookRepository;
+import com.example.rustem.restbookshopping.repository.ReturnedBookRepository;
 import com.example.rustem.restbookshopping.repository.StudentRepository;
 import com.example.rustem.restbookshopping.request.BorrowedBookRequest;
 
@@ -32,6 +33,8 @@ public class BorrowedService {
 
 	private final UserService userService;
 
+	private final ReturnedBookRepository returnedBookRepository;
+
 	private final ModelMapper mapper;
 
 	public ResponseEntity<BorrowedBook> add(BorrowedBookRequest request) {
@@ -44,15 +47,27 @@ public class BorrowedService {
 
 		Integer studentId = request.getStudentId();
 		Student student = studentRepository.findById(studentId)
-				.orElseThrow(() -> new OurRuntimeException(null, "telebe tapilmadi " + studentId));
-		borrowedBook.setStudentId(studentId);
-		borrowedBook.setStudentName(student.getName());
+				.orElseThrow(() -> new OurRuntimeException(null, "tələbə tapılmadı " + studentId));
+		if (student.getCreatorUsername() == username) {
+			borrowedBook.setStudentId(studentId);
+			borrowedBook.setStudentName(student.getName());
+			borrowedBook.setStudentCreatorUsername(student.getCreatorUsername());
+		} else {
+			throw new OurRuntimeException(null, "bu tələbini çağırmağa yetkin yoxdur");
+		}
+
 		//
 		Integer bookId = request.getBookId();
 		Book book = bookRepository.findById(bookId)
-				.orElseThrow(() -> new OurRuntimeException(null, "telebe tapilmadi" + bookId));
-		borrowedBook.setBookId(bookId);
-		borrowedBook.setBookName(book.getName());
+				.orElseThrow(() -> new OurRuntimeException(null, "tələbə tapılmadı" + bookId));
+		if (book.getCreatorUsername() == username) {
+			borrowedBook.setBookId(bookId);
+			borrowedBook.setBookName(book.getName());
+			borrowedBook.setBookCreatorUsername(book.getCreatorUsername());
+		} else {
+			throw new OurRuntimeException(null, "bu kitabı çağırmağa yetkin yoxdur");
+		}
+
 		repository.save(borrowedBook);
 
 		return ResponseEntity.ok(borrowedBook);
