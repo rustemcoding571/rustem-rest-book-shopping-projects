@@ -1,5 +1,9 @@
 package com.example.rustem.restbookshopping.entity;
 
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,4 +28,6 @@ public class BorrowedBook {
 	private String fromWhom;
 	private String BookCreatorUsername;
 	private String StudentCreatorUsername;
+	@CreationTimestamp
+	private Timestamp register;
 }
