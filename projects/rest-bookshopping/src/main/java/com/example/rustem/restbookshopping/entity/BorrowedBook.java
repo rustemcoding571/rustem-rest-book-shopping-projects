@@ -22,4 +22,6 @@ public class BorrowedBook {
 	private Integer bookId;
 	private String bookName;
 	private String fromWhom;
+	private String BookCreatorUsername;
+	private String StudentCreatorUsername;
 }
