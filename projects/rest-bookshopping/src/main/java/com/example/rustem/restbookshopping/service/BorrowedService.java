@@ -1,12 +1,13 @@
 package com.example.rustem.restbookshopping.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.rustem.restbookshopping.entity.Book;
+import com.example.rustem.restbookshopping.entity.BookGiveStudent;
 import com.example.rustem.restbookshopping.entity.BorrowedBook;
 import com.example.rustem.restbookshopping.entity.Student;
 import com.example.rustem.restbookshopping.entity.User;
@@ -35,7 +36,7 @@ public class BorrowedService {
 
 	private final ReturnedBookRepository returnedBookRepository;
 
-	private final ModelMapper mapper;
+	private final BookGiveStudentService bookGiveStudentService;
 
 	public ResponseEntity<BorrowedBook> add(BorrowedBookRequest request) {
 
@@ -67,6 +68,11 @@ public class BorrowedService {
 		} else {
 			throw new OurRuntimeException(null, "bu kitabı çağırmağa yetkin yoxdur");
 		}
+		BookGiveStudent bookGiveStudent = new BookGiveStudent();
+		bookGiveStudent.setBookName(book.getName());
+		bookGiveStudent.setStudentUsername(student.getUsername());
+		bookGiveStudent.setFromWhom(username);
+		bookGiveStudentService.save(bookGiveStudent);
 
 		repository.save(borrowedBook);
 
@@ -78,6 +84,11 @@ public class BorrowedService {
 		String username = user.getUsername();
 		List<BorrowedBook> list = repository.findAllByFromWhom(username);
 		return ResponseEntity.ok(list);
+	}
+
+	public Optional<BorrowedBook> findById(Long id) {
+		Optional<BorrowedBook> o = repository.findById(id);
+		return o;
 	}
 
 }
