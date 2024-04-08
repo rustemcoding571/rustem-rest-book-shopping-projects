@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rustem.restbookshopping.entity.BorrowedBook;
 import com.example.rustem.restbookshopping.request.BorrowedBookRequest;
-import com.example.rustem.restbookshopping.service.BorrowedService;
+import com.example.rustem.restbookshopping.service.BorrowedBookService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BorrowedBooktRestController {
 
-	private final BorrowedService service;
+	private final BorrowedBookService service;
 
 	@PostMapping
 	public ResponseEntity<BorrowedBook> borrowedBook(@RequestBody BorrowedBookRequest request) {

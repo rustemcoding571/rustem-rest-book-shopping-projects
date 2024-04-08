@@ -127,4 +127,9 @@ public class StudentService {
 		return ResponseEntity.ok(response);
 	}
 
+	public Optional<Student> findById(Integer id) {
+		Optional<Student> s = repository.findById(id);
+		return s;
+	}
+
 }

@@ -2,6 +2,7 @@ package com.example.rustem.restbookshopping.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -108,6 +109,11 @@ public class BookService {
 	public ResponseEntity<Object> findAllPagination(Integer begin, Integer length) {
 		List<Book> pagination = repository.findPagination(begin, length);
 		return ResponseEntity.ok(pagination);
+	}
+
+	public Optional<Book> findById(Integer bookId) {
+		Optional<Book> b = repository.findById(bookId);
+		return b;
 	}
 
 }
