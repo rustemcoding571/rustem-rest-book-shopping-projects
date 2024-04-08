@@ -14,7 +14,6 @@ import com.example.rustem.restbookshopping.entity.User;
 import com.example.rustem.restbookshopping.exception.OurRuntimeException;
 import com.example.rustem.restbookshopping.repository.BookRepository;
 import com.example.rustem.restbookshopping.repository.BorrowedBookRepository;
-import com.example.rustem.restbookshopping.repository.ReturnedBookRepository;
 import com.example.rustem.restbookshopping.repository.StudentRepository;
 import com.example.rustem.restbookshopping.request.BorrowedBookRequest;
 
@@ -22,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BorrowedService {
+public class BorrowedBookService {
 
 	private final BorrowedBookRepository repository;
 
@@ -33,8 +32,6 @@ public class BorrowedService {
 	private final SecurityService securityService;
 
 	private final UserService userService;
-
-	private final ReturnedBookRepository returnedBookRepository;
 
 	private final BookGiveStudentService bookGiveStudentService;
 
