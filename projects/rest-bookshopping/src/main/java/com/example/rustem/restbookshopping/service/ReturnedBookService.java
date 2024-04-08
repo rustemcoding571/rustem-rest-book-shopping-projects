@@ -1,5 +1,7 @@
 package com.example.rustem.restbookshopping.service;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +19,7 @@ public class ReturnedBookService {
 
 	private final ReturnedBookRepository repository;
 
-	private final StudentService studentService;
-
-	private final BookService bookService;
-
 	private final BorrowedBookService borrowedBookService;
-
-//	public ResponseEntity<Object> returned(ReturnedBookRequest req) {
-//		ReturnedBook returnedBook = new ReturnedBook();
-//
-//		Integer id = req.getStudentId();
-//		Student student = studentService.findById(id)
-//				.orElseThrow(() -> new OurRuntimeException(null, "belə bir tələbə tapılmadı"));
-//		returnedBook.setWhichStudentBack(id);
-//		returnedBook.setStudentName(student.getName());
-//
-//		Integer bookId = req.getBookId();
-//		Book book = bookService.findById(bookId)
-//				.orElseThrow(() -> new OurRuntimeException(null, "belə bir kitab tapılmadı"));
-//		returnedBook.setBookId(bookId);
-//		returnedBook.setBookName(book.getName());
-//		repository.save(returnedBook);
-//
-//		return ResponseEntity.ok(returnedBook);
-//	}
 
 	public ResponseEntity<Object> returned(ReturnedBookRequest req) {
 		ReturnedBook returnedBook = new ReturnedBook();
@@ -55,5 +34,10 @@ public class ReturnedBookService {
 		repository.save(returnedBook);
 
 		return ResponseEntity.ok(returnedBook);
+	}
+
+	public Optional<ReturnedBook> findById(Integer id1) {
+		Optional<ReturnedBook> o = repository.findById(id1);
+		return o;
 	}
 }
